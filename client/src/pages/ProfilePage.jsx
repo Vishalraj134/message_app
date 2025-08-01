@@ -2,15 +2,16 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import assets from "../assets/assets";
 import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 
 const ProfilePage = () => {
-  // const { authUser, updateProfile } = useContext(AuthContext);
+  const { authUser, updateProfile } = useContext(AuthContext);
 
   const [selectedImg, setSelectedImg] = useState(null);
   const navigate = useNavigate();
-  const [name, setName] = useState("Martin Johnson");
-  const [bio, setBio] = useState("Hi Everyone, I am Using QuickChat");
+  const [name, setName] = useState(authUser.fullName);
+  const [bio, setBio] = useState(authUser.bio);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -79,8 +80,8 @@ const ProfilePage = () => {
             Save
           </button>
         </form>
-        <img
-          src={assets.logo_icon || assets.logo_icon}
+        <img 
+          src={authUser?.profilePic || assets.logo_icon}
           alt=""
           className="hidden sm:block max-w-60 aspect-square rounded-full mx-10 max-sm:mt-10"
         />

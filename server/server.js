@@ -2,10 +2,11 @@ import express from "express";
 import "dotenv/config";
 import cors from "cors";
 import http from "http";
-// import connectDB from "./lib/db.js";
-import authRoutes from "./routes/user.routes.js";
-import messageRoutes from "./routes/message.routes.js";
+import {connectDB} from "./lib/db.js";
+import userRouter from "./routes/userRoutes.js";
 import { Server } from "socket.io";
+import messageRouter from "./routes/messageRoutes.js";
+// import authRoutes from "./routes/auth.js";
 
 // create express server and http server
 const app = express();
@@ -42,15 +43,17 @@ io.on("connection", (socket) => {
 // middleware setup
 app.use(express.json({ limit: "4mb" }));
 app.use(cors());
-
+//  Routes setup
 app.use("/api/status", (req, res) => res.send("server is live"));
-app.use("/api/auth", authRoutes);
-app.use("/api/messages", messageRoutes);
+app.use("/api/auth", userRouter);
+app.use("/api/messages", messageRouter);
+// app.use("/api/users", userRouter); 
+// app.use("/api/auth", authRoutes);
 
 const PORT = process.env.PORT || 5000;
 
 await connectDB();
 
 server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`); 
 });
